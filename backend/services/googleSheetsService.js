@@ -13,28 +13,17 @@ class GoogleSheetsService {
      */
     initializeAuth() {
         try {
-            // Debug: log the key format
-            const rawKey = process.env.GOOGLE_PRIVATE_KEY;
-            console.log('Raw key first 50 chars:', rawKey?.substring(0, 50));
-            console.log('Raw key last 50 chars:', rawKey?.substring(rawKey.length - 50));
-            console.log('Key length:', rawKey?.length);
+            // Get the raw key from environment
+            let rawKey = process.env.GOOGLE_PRIVATE_KEY;
             
-            // Handle both quoted and unquoted keys
-            let processedKey = rawKey;
-            
-            // If the key starts and ends with quotes, try to parse as JSON string
-            if (rawKey?.startsWith('') && rawKey?.endsWith('')) {
-                try {
-                    processedKey = JSON.parse(rawKey);
-                    console.log('Parsed as JSON string');
-                } catch (e) {
-                    console.log('JSON parse failed, using raw value');
-                }
-            }
+            // Strip any surrounding quotes (Render may wrap it in quotes)
+            rawKey = rawKey?.replace(/^["']|["']$/g, '');
             
             // Convert escaped newlines to actual newlines
-            processedKey = processedKey?.replace(/\\n/g, '\n');
-            console.log('Processed key first 50 chars:', processedKey?.substring(0, 50));
+            const processedKey = rawKey?.replace(/\\n/g, '\n');
+            
+            console.log('Private key starts with:', processedKey?.substring(0, 30));
+            console.log('Private key ends with:', processedKey?.substring(processedKey.length - 30));
             
             this.authClient = new GoogleAuth({
                 projectId: process.env.GOOGLE_PROJECT_ID,
