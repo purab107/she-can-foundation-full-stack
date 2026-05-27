@@ -16,8 +16,8 @@ class GoogleSheetsService {
             // Get the raw key from environment
             let rawKey = process.env.GOOGLE_PRIVATE_KEY;
             
-            // Strip any surrounding quotes (Render may wrap it in quotes)
-            rawKey = rawKey?.replace(/^["']|["']$/g, '');
+            // Strip whitespace, then remove quotes (Render may add both)
+            rawKey = rawKey?.trim().replace(/^["']|["']$/g, '');
             
             // Convert escaped newlines to actual newlines
             const processedKey = rawKey?.replace(/\\n/g, '\n');
