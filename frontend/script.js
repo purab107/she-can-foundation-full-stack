@@ -1,5 +1,5 @@
 // Configuration
-const API_BASE_URL = 'http://localhost:3000'; // Change this when backend is deployed
+const API_BASE_URL = 'https://she-can-foundation-full-stack.onrender.com';
 const CONTACT_ENDPOINT = `${API_BASE_URL}/api/contact`;
 
 // Get form elements
