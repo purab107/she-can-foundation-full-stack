@@ -19,8 +19,21 @@ class GoogleSheetsService {
             console.log('Raw key last 50 chars:', rawKey?.substring(rawKey.length - 50));
             console.log('Key length:', rawKey?.length);
             
-            // Create auth client using service account credentials
-            const processedKey = rawKey?.replace(/^"|"$/g, '').replace(/\\n/g, '\n');
+            // Handle both quoted and unquoted keys
+            let processedKey = rawKey;
+            
+            // If the key starts and ends with quotes, try to parse as JSON string
+            if (rawKey?.startsWith('') && rawKey?.endsWith('')) {
+                try {
+                    processedKey = JSON.parse(rawKey);
+                    console.log('Parsed as JSON string');
+                } catch (e) {
+                    console.log('JSON parse failed, using raw value');
+                }
+            }
+            
+            // Convert escaped newlines to actual newlines
+            processedKey = processedKey?.replace(/\\n/g, '\n');
             console.log('Processed key first 50 chars:', processedKey?.substring(0, 50));
             
             this.authClient = new GoogleAuth({
